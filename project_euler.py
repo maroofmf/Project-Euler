@@ -54,6 +54,52 @@ Please uncomment the code you wish to run.
 
 # ------------------------------------------------------------------------------------------------------------------- #
 # Problem 3: Largest Prime Factor
-# ------------------------------------------------------------------------------------------------------------------- #
+# -------------------------------------------------------------------------------------------------------------------
 
-# def isPrime(number):
+import sympy
+import time
+import multiprocessing as mp
+import math
+
+global number
+number = 1973
+
+#AKS Primality test
+
+def isPrime():
+    pool = mp.Pool(10)
+    blocks = math.ceil(number/30)
+    # blocks = 2
+    for index in range(1,blocks+1):
+        poolOutput = pool.map(divisibilityTest,range(math.ceil(((number-1)/blocks)*blocks),max(math.floor(((number-1)/blocks)*(blocks-1)),1),-1))
+        if 'Composite' in poolOutput:
+            return('Composite')
+    return ('Prime')
+
+def divisibilityTest(args):
+    coefficient = (sympy.binomial(number,args)/number)
+    if coefficient %1 != 0:
+        return('Composite')
+    return('Prime')
+
+
+
+def isPrime2():
+    for i in range(number-1 , 1, -1):
+        coefficient = (sympy.binomial(number,i)/number)
+    if coefficient %1 != 0:
+        return('Composite')
+    return('Prime')
+
+
+startTime = time.time()
+print('The answer for method 1:' + isPrime())
+totalTime = (time.time()-startTime)
+print('Total Time for method 1:', totalTime)
+
+startTime = time.time()
+print('The answer for method 2:' + isPrime2())
+totalTime = (time.time()-startTime)
+print('Total Time for method 2:', totalTime)
+
+
